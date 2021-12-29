@@ -31,12 +31,10 @@
             android:textSize="20sp"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:drawablePadding="5dp"
             android:fontFamily="@font/mali_bold"
             android:background="@drawable/back_background"
             android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:padding="5dp" />
+            android:paddingEnd="5dp" />
 
         <RelativeLayout
             android:layout_width="0dp"

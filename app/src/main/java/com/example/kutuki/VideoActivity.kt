@@ -143,6 +143,7 @@ class VideoActivity : AppCompatActivity() {
         videoView.setOnCompletionListener { mp: MediaPlayer ->
             videoView.seekTo(0)
             mediaPlayer = mp
+            mediaPlayer.setVolume(1.0f,1.0f)
             try {
                 Log.d("videoView", "Bufferplay: prepare async called")
                 mediaPlayer.prepareAsync()
@@ -218,7 +219,8 @@ class VideoActivity : AppCompatActivity() {
         ivRewind.setOnClickListener { v: View? ->
             if(isLoading) return@setOnClickListener
             try {
-                if (mediaPlayer.currentPosition - 10000 > 1000) {
+                Log.d("mediaPlayer", "clickListener: -"+mediaPlayer.currentPosition)
+                if (mediaPlayer.currentPosition - 10000 > 10000) {
                     val mCurrentPosition = mediaPlayer.currentPosition / 1000 - 10
                     mediaPlayer.seekTo(mediaPlayer.currentPosition - 10000)
                     seekBar.progress = seekBar.progress - 10
@@ -230,10 +232,6 @@ class VideoActivity : AppCompatActivity() {
                     second = if (sec.toString().length == 1) "0$sec" else sec.toString()
                     tvStart.text = "$minute:$second"
                 } else {
-                    if (mediaPlayer.isPlaying) {
-                        mediaPlayer.stop()
-                        videoView.stopPlayback()
-                    }
                     mediaPlayer.seekTo(0)
                     videoView.seekTo(0)
                     seekBar.progress = 0
@@ -279,7 +277,7 @@ class VideoActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
                 if(isLoading) return
-                if (seekBar.getProgress() < (duration - 10)) {
+                if (seekBar.getProgress() < (duration - 10) && mediaPlayer.isPlaying && videoView.isPlaying) {
                     mediaPlayer.seekTo(seekBar.getProgress() * 1000);
                     videoView.seekTo(seekBar.getProgress() * 1000);
                 }
