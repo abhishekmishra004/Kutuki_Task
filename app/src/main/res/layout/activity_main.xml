@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.kutuki.viewModel.MainActivityModel" />
+        <variable
+            name="activity"
+            type="com.example.kutuki.MainActivity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/category_background_radient">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:listitem="@layout/each_category"/>
+
+    </LinearLayout>
+</layout>
