@@ -7,11 +7,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.setMargins
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,10 +24,6 @@ import com.example.kutuki.databinding.ActivityVideoBinding
 import com.example.kutuki.viewModel.MainActivityModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.kutuki.viewModel.MainActivityModel.video as video1
-import android.util.DisplayMetrics
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.setMargins
 
 
 @AndroidEntryPoint
@@ -78,8 +77,6 @@ class VideoActivity : AppCompatActivity() {
         videoView.setMediaController(mediacontroller)
 
         ivPlayPause.setTag(R.drawable.ic_play_circle)
-
-        //mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
 
         video1.videoData.observe(this, {
             it?.let {
@@ -256,8 +253,7 @@ class VideoActivity : AppCompatActivity() {
                     tvStart.text = "$minute:$second"
                 } else {
                     if (mediaPlayer.isPlaying) {
-                        mediaPlayer.stop()
-                        videoView.stopPlayback()
+                        mediaPlayer.pause()
                     }
                     seekBar.progress = seekBar.max
                     val end = tvEnd.text.toString()
@@ -270,6 +266,10 @@ class VideoActivity : AppCompatActivity() {
         
         seekBar.setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                if(seekBar.progress == 0 && !mediaPlayer.isPlaying){
+                    ivPlayPause.setImageResource(R.drawable.ic_play_circle)
+                    ivPlayPause.tag = R.drawable.ic_play_circle
+                }
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -277,7 +277,7 @@ class VideoActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
                 if(isLoading) return
-                if (seekBar.getProgress() < (duration - 10) && mediaPlayer.isPlaying && videoView.isPlaying) {
+                if (seekBar.progress < (duration - 10) && mediaPlayer.isPlaying && videoView.isPlaying) {
                     mediaPlayer.seekTo(seekBar.getProgress() * 1000);
                     videoView.seekTo(seekBar.getProgress() * 1000);
                 }
@@ -315,15 +315,19 @@ class VideoActivity : AppCompatActivity() {
         ivPlayPause.setOnClickListener { v: View? ->
             if(isLoading) return@setOnClickListener
             if (ivPlayPause.tag as Int == R.drawable.ic_play_circle) {
+                if((mediaPlayer.currentPosition / 1000) >= duration-1) {
+                    mediaPlayer.seekTo(0)
+                    videoView.seekTo(0)
+                    seekBar.progress = 0
+                    tvStart.text = "00:00"
+                }
                 if (!mediaPlayer.isPlaying) mediaPlayer.start()
                 ivPlayPause.setImageResource(R.drawable.ic_pause_circle)
-                ivPlayPause.setColorFilter(Color.argb(255, 255, 255, 255))
                 ivPlayPause.tag = R.drawable.ic_pause_circle
                 mCurrentPosition = videoView.getCurrentPosition()
             } else {
-                if (mediaPlayer.isPlaying) mediaPlayer.pause()
+                if (mediaPlayer.isPlaying) mediaPlayer.stop()
                 ivPlayPause.setImageResource(R.drawable.ic_play_circle)
-                ivPlayPause.setColorFilter(Color.argb(255, 255, 255, 255))
                 ivPlayPause.tag = R.drawable.ic_play_circle
             }
         }
