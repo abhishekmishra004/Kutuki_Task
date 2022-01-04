@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.setMargins
@@ -29,7 +30,7 @@ import com.example.kutuki.viewModel.MainActivityModel.video as video1
 @AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
 
-    lateinit var viewModel: MainActivityModel
+    val viewModel: MainActivityModel by viewModels()
     lateinit var binding: ActivityVideoBinding
 
     lateinit var ivRewind: ImageView
@@ -53,7 +54,6 @@ class VideoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_video)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        viewModel = ViewModelProvider(this).get(MainActivityModel::class.java)
 
         val type = intent.getStringExtra("name")
 

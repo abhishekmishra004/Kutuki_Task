@@ -3,6 +3,7 @@ package com.example.kutuki
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -19,13 +20,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel: MainActivityModel
+    val viewModel: MainActivityModel by viewModels()
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-        viewModel = ViewModelProvider(this).get(MainActivityModel::class.java)
         binding.rvCategory.layoutManager = GridLayoutManager(this,2,HORIZONTAL,false);
         binding.rvCategory.setHasFixedSize(true)
         viewModel.error.observe(this, {
