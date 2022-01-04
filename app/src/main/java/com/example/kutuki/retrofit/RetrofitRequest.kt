@@ -23,12 +23,10 @@ object RetrofitRequest {
     @Singleton
     @Provides
     fun getClientBuilder(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor()
         return OkHttpClient().newBuilder()
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(interceptor)
             .build()
     }
 
