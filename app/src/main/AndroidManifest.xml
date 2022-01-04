@@ -14,6 +14,9 @@
         android:theme="@style/NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".TestActivity"
+            android:exported="true" />
+        <activity
             android:name=".VideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
@@ -26,6 +29,7 @@
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
